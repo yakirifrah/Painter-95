@@ -46,9 +46,7 @@ for (var i = 0; i < lenPlateColorFirstRow; i++) {
 
 
 for (var i = lenPlateColorFirstRow; i < lenPlateColor; i++) {
-    // console.log (plateColor[i] );
     var colButton = $('<button class="col-md-1"></button>');
-    // var button = $('<button></button>');
     colButton.attr('id', `${plateColor[i]}`);
     colButton.attr('class', `${plateColor[i]}`);
     // $(colButton).append(button);
@@ -67,7 +65,7 @@ for (var i = 0; i < lenFeatures/2; i++) {
 
     if (i === 1)
     {
-        var row = $('<div class="row"><button id = "' + paint.features[i+1]+ '" class="col-md-1 fas"></button><button id = "' + paint.features[i+2]+ '" class="col-md-1 fas '+paint.features[i+2]+'"></button></div>');
+        var row = $('<div class="row"><button id = "' + paint.features[i+1]+ '" class="col-md-1 fas fa-brush"></button><button id = "' + paint.features[i+2]+ '" class="col-md-1 fas '+paint.features[i+2]+'"></button></div>');
 
     }
     $("#container-nav-bar").append(row);
@@ -77,13 +75,18 @@ for (var i = 0; i < lenFeatures/2; i++) {
 
 
 $("button").click(function (e) {
-    currentColor = e.target.id;
-    $('#canvas').css('cursor', 'crosshair');
+    console.log(e.button);
+    if (e.button === 0) {
+   
+        currentColor = e.target.id;
+        $('#canvas').css('cursor', 'crosshair');
+        
+    }
+   
 })
 
 
-
-// $()
+// $("#eraser").$
 
 
 
@@ -108,24 +111,30 @@ $("button").click(function (e) {
 // });
 
 
-$("#canvas").mousedown(function () {
-    $(this).mousemove(function (e) {
-        if (currentColor !== undefined) {
-            // console.log("hight: "+ e.pageY);
-            // console.log("width: "+e.pageX);
-            var left = e.pageX - $('#canvas').offset().left + 'px';
-            var top = e.pageY - $('#canvas').offset().top + 'px';
-            // console.log(left);
-            // console.log(top);
-            var spanDraw = $('<span class="draw"></span>');
-            // spanDraw.attr('class',`${currentColor}`);
-            $(spanDraw).addClass(`${currentColor}`);
-            $(spanDraw).css("left", `${left}`);
-            $(spanDraw).css("top", `${top}`);
+$("#canvas").mousedown(function (e) {
+    if (e.button === 0) {
+        $(this).mousemove(function (e) {
+            if (currentColor !== undefined) {
+                // console.log("hight: "+ e.pageY);
+                // console.log("width: "+e.pageX);
+                var left = e.pageX - $('#canvas').offset().left + 'px';
+                var top = e.pageY - $('#canvas').offset().top + 'px';
+                // console.log(left);
+                // console.log(top);
+                var spanDraw = $('<span class="draw"></span>');
+                // spanDraw.attr('class',`${currentColor}`);
+                $(spanDraw).addClass(`${currentColor}`);
+                $(spanDraw).css("left", `${left}`);
+                $(spanDraw).css("top", `${top}`);
+    
+                $('#canvas').append(spanDraw);
+            }
+        });
+        
+        
+    }
 
-            $('#canvas').append(spanDraw);
-        }
-    });
+   
 }).mouseup(function () {
     $(this).unbind('mousemove');
 });

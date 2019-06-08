@@ -2,22 +2,36 @@ body {
     height: 100%;
     width: 100%;
     position: relative;
+    background-color: #81ecec;
 }
+.title {
+    margin-top: 2%;
+    width:400px;
+    font-family: 'Finger Paint', cursive;
+}
+
 
 .canvas-style {
-    height: 400px;
-    width: 400px;
+    height: 500px;
+    width: 500px;
     position: relative;
     background-color: white;
-    border: 1px solid gray;
+    border: 1px solid #7bed9f;
 }
+.btn {
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+    align-items: center;
 
+}
 
 .row.border{
     border: 1px solid gray;
 }
 
 button {
+    margin:1%;
     height: 20px;
     width: 20px;
 }
@@ -51,8 +65,8 @@ button {
     position:fixed;
     display: flex;    
     align-items: center;
-    width: 4.6%;
-    height: 400px;
+    width: 100px;
+    height: 500px;
     border: 1px solid gray;
     background-color: #f1f2f6;
 }
@@ -61,6 +75,14 @@ button {
 
 .renctangle {
     background-image: url("../src/icon/rectangle_icon.png") ;
+    background-repeat: no-repeat;
+    background-position: center; /* Center the image */
+    width: 15px;
+    background-size: contain;
+}
+
+.resize {
+    background-image: url("../src/icon/resize-icon.png") ;
     background-repeat: no-repeat;
     background-position: center; /* Center the image */
     width: 15px;
@@ -112,4 +134,18 @@ button {
 }
 .btn-group-size{
     display: none;
+}
+ 
+.border-current-color {
+    border: 1px solid gray;
+    height: 61px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.current-color {
+    border: 1px solid yellow;
+    width: 30px;
+    height: 30px;
 }

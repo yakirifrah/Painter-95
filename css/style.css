@@ -23,10 +23,9 @@ body {
     font-size: 12px;
     justify-content: center;
     align-items: center;
-
 }
 
-.row.border{
+.row.border {
     border: 1px solid gray;
 }
 
@@ -62,7 +61,6 @@ button {
 }
 
 .navbar-nav{
-    position:fixed;
     display: flex;    
     align-items: center;
     width: 100px;
@@ -71,10 +69,15 @@ button {
     background-color: #f1f2f6;
 }
 
-
-
-.renctangle {
-    background-image: url("../src/icon/rectangle_icon.png") ;
+.hourse {
+    background-image: url("../src/img/hourse.png") ;
+    background-repeat: no-repeat;
+    background-position: center; /* Center the image */
+    width: 15px;
+    background-size: contain;
+}
+.clearScreen {
+    background-image: url("../src/icon/new-page.png") ;
     background-repeat: no-repeat;
     background-position: center; /* Center the image */
     width: 15px;
@@ -148,4 +151,21 @@ button {
     border: 1px solid yellow;
     width: 30px;
     height: 30px;
+}
+.modal-body{
+    display: inline-flex;
+    justify-content: space-around;
+}
+span.input-group.mb-3 {
+    width: 177px;
+}
+.input-group {
+    position: relative;
+    display: -ms-flexbox;
+    display: inline-flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    width: 100%;
 }

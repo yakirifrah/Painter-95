@@ -6,6 +6,7 @@ var higthPostion;
 var widthPosition;
 var currentColor = 'black';
 var lenFeatures = paint.features.length;
+var canvasBorder = 17;
 var cursor = {
     cursor: 'crosshair',
 }
@@ -28,8 +29,8 @@ var innerBody = `<div class="container">
                             <div class="title text-center">
                                 <h1 class="style-title">Paint 95</h1>
                             </div>
-                            <div class="row pt-4 justify-content-md-center">
-                                <div class="col-md-1">
+                            <div class="row pt-4 justify-content-md-center flex-nowrap">
+                                <div class="col-md-1 mr-3">
                                     <ul class="navbar-nav">
                                         <div id="container-nav-bar">
                                         </div>
@@ -41,7 +42,7 @@ var innerBody = `<div class="container">
                                                         <div class="box-size" id="size-l"><div class="size-l"></div></div>
                                                         <div class="box-size" id="size-xl"><div class="size-xl"></div></div>
                                                     </div>
-                                                </div>
+                                            </div>
                                         </div>
                                     </ul>
                                 </div>
@@ -49,7 +50,7 @@ var innerBody = `<div class="container">
                                     <div id='canvas' class = 'canvas-style' oncontextmenu="return false;"></div>
                                 </div>
                             </div>
-                                <div class = "row pt-4">
+                                <div class = "row pt-4 flex-nowrap">
                                     <div class = 'col-md-1'>
                                         <div class="border-current-color">
                                             <div class="current-color"></div>
@@ -100,6 +101,8 @@ var modal = `<div class="modal fade" id="exampleModalCenter" tabindex="-1" role=
         </div>`
 
 $(document.body).append(innerBody);
+
+
 var initPlateRow = () => {
     for (var i = 0; i < lenPlateColorFirstRow; i++) {
         var colButton = $('<button class="col-md-1"></button>');
@@ -119,34 +122,23 @@ var initPlateRow = () => {
 
 
 var initFeaturesPaint = () => {
-    for (var i = 0; i < lenFeatures / 2; i++) {
+    for (var i = 0; i < lenFeatures; i++) {
         if (i === 0) {
-            var row = $('<div class="row"><button data-toggle="tooltip" data-placement="top" title="eraser" id = "' + paint.features[i] + '" class="col-md-1 fas fa-eraser"></button><button data-toggle="tooltip" data-placement="top" title="pencil" id = "' + paint.features[i + 1] + '" class="col-md-1 fas fa-pencil-alt"></button></div>');
+            var row = $('<div class="row flex-nowrap"><button data-toggle="tooltip" data-placement="top" title="eraser" id = "' + paint.features[i] + '" class="col-md-12 fas fa-eraser"></button></div>');
         }
-        //next version
-        // if (i === 1) {
-        //     var row = $('<div class="row"><button data-toggle="tooltip" data-placement="left" title="brush" id = "' + paint.features[i + 1] + '" class="col-md-1 fas fa-brush"></button><button data-toggle="tooltip" data-placement="right" title="Tooltip on top" id = "' + paint.features[i + 2] + '" class="col-md-1 fas ' + paint.features[i + 2] + '"></button></div>');
-
-        // }
         if (i === 1) {
-            var row = $('<div class="row"><button data-toggle="tooltip" data-placement="left" title="brush" id = "' + paint.features[i + 1] + '" class="col-md-1 fas fa-brush"></button></div>');
+            var row = $('<div class="row flex-nowrap"><button data-toggle="tooltip" data-placement="left" title="brush" id = "' + paint.features[i] + '" class="col-md-12 fas fa-brush"></button></div>');
 
         }
         if (i === 2) {
-            var row = $('<div class="row"><button title="resize" id = "' + paint.features[i + 2] + '" class="col-md-1 fas ' + paint.features[i + 2] + '"" data-toggle="modal" data-target="#exampleModalCenter"></button><button title="new page" id = "' + paint.features[i + 3] + '" class="col-md-1 fas ' + paint.features[i + 3] + '""></button></div>');
-
+            var row = $('<div class="row flex-nowrap"><button title="resize" id = "' + paint.features[i] + '" class="col-md-12 fas ' + paint.features[i] + '"" data-toggle="modal" data-target="#exampleModalCenter"></button></div>');
         }
-        //next version
-        // if (i === 3) {
-        //     var row = $('<div class="row"><button id = "' + paint.features[i + 4] + '" class= "jscolor {valueElement:"valueInput", styleElement:"styleInput"}  col-md-4 fas ' + paint.features[i + 4] + '" title="pick color">pick</button></div>')
-            
-        // }
+        if (i == 3) {
+            var row = $('<div class="row flex-nowrap"><button title="new page" id = "' + paint.features[i] + '" class="col-md-12 fas ' + paint.features[i] + '""></button></div>');
+        }
         $("#container-nav-bar").append(row);
-
     }
-
 }
-
 var currentColorBox = () => {
     $(".current-color").css('background-color', `${currentColor}`);
 }
@@ -156,18 +148,14 @@ var initHtml = () => {
     currentColorBox();
 }
 
-
 initHtml();
-
 var defualtCursor = () => {
     $('#canvas').css('cursor', 'crosshair');
 }
 
 
-//think about default cursor when i'm over canvas
-// create objects of brush,pencail as..
+
 $(".btn-color").click(function (e) {
-    $("#canvas").bind('mousedown');
     mode.paint = true;
     mode.eraser = false;
     if (e.button === 0) {
@@ -177,68 +165,47 @@ $(".btn-color").click(function (e) {
     }
 })
 
+function mouseupBody() {
+    $('body').mouseup(function () {
+        $('#canvas').unbind('mousemove');
+    })
 
-
+}
 
 $("#canvas").mousedown(function (eventObjectCanvas) {
-    stopePropagationMde();
     mode.eraser = false;
     if (mode.paint) {
         if (eventObjectCanvas.button === 0) {
             defualtCursor();
             $(this).mousemove(function (eventObjectCanvas) {
                 if (currentColor !== undefined) {
-                    var left = eventObjectCanvas.pageX - $('#canvas').offset().left + 'px';
-                    var top = eventObjectCanvas.pageY - $('#canvas').offset().top + 'px';
-                    var spanDraw = $('<span class="draw"></span>');
-                    $(spanDraw).addClass(`${currentColor}`);
-                    $(spanDraw).css("height", `${sizeBrush.heightBrush}px`);
-                    $(spanDraw).css("width", `${sizeBrush.widthBrush}px`);
-                    $(spanDraw).css("left", `${left}`);
-                    $(spanDraw).css("top", `${top}`);
-                    $('#canvas').append(spanDraw);
+                    var wantedWidth = sizeCanvas.width;
+                    var wantedHeight = sizeCanvas.height;
+                    var left = eventObjectCanvas.pageX - $(this).offset().left;
+                    var top = eventObjectCanvas.pageY - $(this).offset().top;
+                    if (left < wantedWidth - canvasBorder && top < wantedHeight - canvasBorder) {
+                        var spanDraw = $('<span class="draw"></span>');
+                        $(spanDraw).addClass(`${currentColor}`);
+                        $(spanDraw).css("height", `${sizeBrush.heightBrush}px`);
+                        $(spanDraw).css("width", `${sizeBrush.widthBrush}px`);
+                        $(spanDraw).css("left", `${left}px`);
+                        $(spanDraw).css("top", `${top}px`);
+                        $('#canvas').append(spanDraw);
+                    }
                 }
             }).mouseup(function (e) {
                 if (e.button === 0) {
+                    mouseupBody();
                     $(this).unbind('mousemove');
                 }
             });
+
+
         }
     }
-    if (eventObjectCanvas.button === 2) {
-        mode.paint = false;
-        var urlCursor = '../src/cursor/eraser.cur';
-        $("#canvas").css('cursor', `url(${urlCursor}),auto`);
-        stopePropagationMde();
-         $('.draw').mousedown(function (e) {
-             $('#canvas').mousemove(function(eventDrawMove){
-                 console.log(eventDrawMove);
-                e.currentTarget.remove();
-             })
-        }).mouseup(function (e) {
-            console.log(e);
-            if (e.button === 0) {
-                $(this).unbind('mousemove');
-            }
-        });
 
-        mode.paint = true;
-
-    }
 })
 
-
-
-// $('#canvas .draw').mousedown(function (eventDrawObj) {
-//     console.log('clicckckckc');
-//     if (eventDrawObj.button === 2) {
-//         var urlCursor = '../src/cursor/eraser.cur';
-//         $("#canvas").css('cursor', `url(${urlCursor}),auto`);
-//         $(this).mousemove(function (eventDrawMove) {
-//             eventDrawMove.currentTarget.remove();
-//         })
-//     }
-// })
 
 var stopePropagationMde = () => {
     $('*').bind('blur change click dblclick error focus focusin focusout hover keydown keypress keyup load mousedown mouseenter mouseleave mousemove mouseout mouseover mouseup resize scroll select submit', function (event) {
@@ -256,29 +223,29 @@ $("#eraser").click(function (e) {
     }
 })
 
-
 var eraser = () => {
     $(".draw").mousedown(function (e) {
         if (e.button === 0) {
-            $("#canvas .draw").mousemove(function (eventDrawObj) {
-                eventDrawObj.currentTarget.remove();
-            })
+            $("#canvas").mousemove(function (eventDrawObj) {
+                console.log(eventDrawObj);
+                if (eventDrawObj.target.childNodes.length === 0) {
+                    $(eventDrawObj.target).attr('class', 'draw white');
+                }
+            }).mouseup(function (e) {
+                if (e.button === 0) {
+                    mouseupBody();
+                    $('#canvans').unbind('mousemove');
+                }
+            });
         }
     })
 }
-
-
-
-
-
-
 
 var showBarSize = () => {
     $('.btn-group-size').css('display', 'block');
 }
 
 $('#brush').click(() => {
-    console.log('click');
     $("#canvas").on('mousedown');
     var urlCursor = '../src/cursor/brush.cur';
     cursor.cursor = urlCursor;
@@ -305,7 +272,6 @@ $('#size-m').mousedown(function (e) {
         $('#size-l').removeClass('click-box-size');
         $('#size-xl').removeClass('click-box-size');
         $(".draw").addClass('size-m');
-        // listnerMouseToBrush(sizeBrush);
     }
 })
 $('#size-l').mousedown(function (e) {
@@ -329,35 +295,20 @@ $('#size-xl').mousedown(function (e) {
     }
 })
 
+$('#resize').click(function (e) {
+    $(".draw").remove();
 
-
-
-$('#pencil').mousedown(function (e) {
-    $("#canvas").bind('mousedown');
-    if (e.button === 0) {
-        var urlCursor = '../src/cursor/pencil.cur';
-        cursor.cursor = urlCursor;
-        $("#canvas").css('cursor', `url(${urlCursor}),auto`);
-    }
-
-})
-
-
-
-$('#resize').mousedown(function (e) {
-    if (e.button === 0) {
-        $(document.body).append(modal);
-
-    }
+    let newModal = modal;
+    $(document.body).append(newModal);
 });
 
 var saveResize = () => {
-    $('#canvas').css({ "width": `${sizeCanvas.width}px`, "height": `${sizeCanvas.height}px` });
+    $('#canvas').css({
+        "width": `${sizeCanvas.width}px`,
+        "height": `${sizeCanvas.height}px`
+    });
     $(".navbar-nav").css("height", `${sizeCanvas.height}`);
-
 }
-
-
 var heightInput = (val) => {
     sizeCanvas.height = val;
 }
@@ -373,28 +324,4 @@ $('#clearScreen').mousedown(function (e) {
         $(".draw").remove();
     }
 });
-//next version
-// $('#hourse').mousedown(function (e) {
-//     mode.paint  = false;
-//     if (e.button === 0) {
-//         var urlCursor = '../src/cursor/horse.cur';
-//         cursor.cursor = urlCursor;
-//         $("#canvas").css('cursor', `url(${urlCursor}),auto`);
-//         $("#canvas").mousedown(function (e) {
-//             console.log(e);
-//                 var left = e.pageX - $('#canvas').offset().left + 'px';
-//                 var top = e.pageY - $('#canvas').offset().top + 'px';
-//                 $("#canvas").css({ "background-image": 'url("../src/img/hourse.png")', "background-size": "200px 200px, cover", "background-repeat": "no-repeat", "background-position": `${left} ${top}` });
-            
-//         }).mouseup(function () {
-//             console.log("click 1");
-//             mode.paint = true;
-//             $("#canvas").css('cursor', ``);
-//             $("#canvas").off('mousedown');
-
-//         });
-
-//     }
-// })
-
 
